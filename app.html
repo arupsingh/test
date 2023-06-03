@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speech to Text</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(45deg, #033a42, #494b56);
+            background-size: 400% 400%;
+            animation: gradientAnimation 20s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 32px;
+        }
+
+        .record-btn {
+            background-color: #3b573c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .stop-btn {
+            background-color: #492624;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 40px;
+            font-size: 18px;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech to Text</h1>
+    <button id="start-btn" class="record-btn">Start Recording</button>
+    <button id="stop-btn" class="stop-btn">Stop Recording</button>
+    <div id="result"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var recognition;
+
+        $(document).ready(function() {
+            $('#start-btn').click(function() {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+
+                recognition.onresult = function(event) {
+                    var result = event.results[event.results.length - 1];
+                    if (result.isFinal) {
+                        $('#result').text(result[0].transcript);
+                    }
+                }
+
+                recognition.start();
+            });
+
+            $('#stop-btn').click(function() {
+                recognition.stop();
+            });
+        });
+    </script>
+</body>
+</html>
